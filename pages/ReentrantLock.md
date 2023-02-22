@@ -1,1 +1,2 @@
-- ReentrantLock默认是非公平锁，底层依赖的是AQS
+- ReentrantLock默认是非公平锁，底层依赖的是[[AQS]]
+-
