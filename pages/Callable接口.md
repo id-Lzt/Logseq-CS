@@ -1,0 +1,1 @@
+- 实现Callable接口，内部方法为call,有返回值可以确定是完成的是哪一个线程,需要通过excutorservice和future进行管理获取到返回值
