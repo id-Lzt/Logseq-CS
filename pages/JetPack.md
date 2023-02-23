@@ -10,8 +10,6 @@
   
   MVVM,分别为model,view,viewmodel,严格的mvvm开发model和view之间不能直接进行数据交流而是依靠viewmodel
   
-  MVVM,分别是Model,view,viewModel，在严格的MVVM模型下view和model之间不能直接进行通信，而是通过viewmodel。
-  
   viewmodel中的数据独立于生命周期之外，从而解决了数据的瞬态丢失等情况，
   
   并且viewmodel可以设置观察者轻松实现双向绑定，视图上的变化也可以很快的和model交流。
