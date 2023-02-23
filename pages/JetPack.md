@@ -1,6 +1,6 @@
 - 是由多个库组成的套件，是谷歌给安卓开发者提供的写业务代码的最佳做法。
 - Google 推出了 Jetpack，让开发者能够使用标准的架构组件，而不用去纠结架构的方案设计，可以将更多的精力放在自己的业务代码上
-- ### MVVM和MVC各自特点以及应用场景？
+- ## MVVM和MVC各自特点以及应用场景？
 	- ### MVC
 		- #### 组成
 			- MVC分别是model,view,controller,res文件下的布局就是view层，而activity则充当controller层。
