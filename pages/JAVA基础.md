@@ -11,13 +11,13 @@
 		- 调用父类的变量，构造方法，方法
 	- ### this
 		- 调用本类中的同名变量或相同形参的构造方法
+- [:figure {:cid "n129", :mdtype "table"} [:table {} [:thead {} [:tr {:cid "n130", :mdtype "table_row"} [:th {} [:span {:cid "n131", :mdtype "table_cell"} [:span {:md-inline "plain"} "抽象类"]]] [:th {} [:span {:cid "n132", :mdtype "table_cell"} [:span {:md-inline "plain"} "接口"]]]]] [:tbody {} [:tr {:cid "n133", :mdtype "table_row"} [:td {} [:span {:cid "n134", :mdtype "table_cell"} [:span {:md-inline "plain"} "一个类只能继承一个抽象类"]]] [:td {} [:span {:cid "n135", :mdtype "table_cell"} [:span {:md-inline "plain"} "一个类可以实现多个接口"]]]] [:tr {:cid "n136", :mdtype "table_row"} [:td {} [:span {:cid "n137", :mdtype "table_cell"} [:span {:md-inline "plain"} "成员可以是public,也可以是private,protected"]]] [:td {} [:span {:cid "n138", :mdtype "table_cell"} [:span {:md-inline "plain"} "所有成员都是public"]]]] [:tr {:cid "n139", :mdtype "table_row"} [:td {} [:span {:cid "n140", :mdtype "table_cell"} [:span {:md-inline "plain"} "成员变量无限制"]]] [:td {} [:span {:cid "n141", :mdtype "table_cell"} [:span {:md-inline "plain"} "成员变量只能是常量，是public static final类型"]]]] [:tr {:cid "n142", :mdtype "table_row"} [:td {} [:span {:cid "n143", :mdtype "table_cell"} [:span {:md-inline "plain"} "有构造方法"]]] [:td {} [:span {:cid "n144", :mdtype "table_cell"} [:span {:md-inline "plain"} "无构造方法"]]]] [:tr {:cid "n145", :mdtype "table_row"} [:td {} [:span {:cid "n146", :mdtype "table_cell"} [:span {:md-inline "plain"} "可以有静态方法"]]] [:td {} [:span {:cid "n147", :mdtype "table_cell"} [:span {:md-inline "plain"} "不能有静态方法"]]]]]]]
 - ## 抽象类/接口
-	- 接口适用于描述特征，抽象类型的共性，
-	- 抽象类适用于表述本身是什么，
-	  
-	  接口主要是用来抽象类型的共性，例如说，容器的可迭代特性。
-	- 类主要是给具体实现类提供重用的代码
-	- 抽象
+	- ### 抽象类
+		- 抽象类适用于表述本身是什么，主要是给具体实现类提供重用的代码
+	- ### 接口
+		- 接口适用于描述特征，共性
+-
 - ## 静态
 	- ### 特点
 		- 1.只加载一次，加载时优先于非静态
