@@ -56,6 +56,7 @@
 		- 为其设置变量名.postValue,getValue,observe分别进行数据传入传出以及内部匿名类实现监听,
 		- 最主要的优势还是能够使用observe进行监听，例如可以让两个fragment公用一个viewmodel中的livedata达到控件同步，同时在
 - ## DataBinding
+	- ### 作用
 - 实现动态的数据绑定和事件绑定
 - 首先添加依赖
 - 在布局文件中以layout为根目录添加数据类的数据对象尖括号data,同时在具体View的中用@{}实现绑定
