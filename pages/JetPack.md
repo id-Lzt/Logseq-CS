@@ -16,69 +16,61 @@
 			  耦合度低，可以让开发人员专注于业务逻辑，设计同学专注于页面设计
 			  并且常规MVVM模式中用到了较多jetpack组件库中的组件，也是未来这个安卓开发的趋势，我觉得啥都可以尝试用MVVM模式。
 - ## lifecycle
-- ### 生命周期监听
-	- 安卓sdk29之后新增的registerActivityLifecycleCallbacks可以直接监听生命周期事件回调，sdk29之前会通过向 Activity 添加一个无 UI 界面的 Fragment(即 ReportFragment),间接获得 Activity 的各个生命周期事件的回调。
-- ### 实现原理
-	- 一个info方法存放所有@OnLifecycleEvent()注解修饰的方法，最后通过反射的方式，方法名.invoke依据生命周期进行回调
-- ### 使用
-	- lifeCycle解耦界面与组件，可以对单个活动的生命周期进行监听，不使用lifeCycle的情况下需要去活动下重写onstart,onpause等再在其方法内进行响应操作，使用lifecycle则需要自定义一个观察者以lifecycleobserver作为接口，并且在其内部自定义方法用注解@OnLifecycleEvent（）类型进行各个生命周期的绑定。
-- ## 什么是viewmodel?
-  
-  是介于view和model之间的桥梁，用来将试图和数据分离，来把model中的数据提供给view
-  
-  使用：自定义类继承自ViewModel类
-##### viewmodel作用
-
-1.解决瞬态数据丢失，比如正常情况下在输入框内输入内容将屏幕旋转由于活动销毁并重建会导致数据丢失，但是viewodel由于他生命周期的特性，他的数据储存是独立与活动的生命周期之外的，其实活动被销毁他也仍然存在
-
-2.数据统一进行管理可以减小代码维护难度
-
-原理：
-
-1.为什么能够独立于活动或者碎片的生命周期之外？
-
-找到viewmodelstore,andoridx的activity父类ComponentActivity实现的有ViewModelStoreOwner接口
-
-2.onCeate创建的时候如何保证拿到的是从前存有数据的viewmodelstore?
-
-get方法通过反射获取到这个viewmodel.class的标识，作为hashmap的key,之后如果之前存在就直接使用，没有的话则通过创建工厂里的create方法利用反射的方式创建对象
-##### 什么是liveData?
-
-生命周期发生变化时会通知
-
-就是在viewmodel中的数据发生变化时通知试图页面的方式
-
-liveData具体使用：
-
-在自定义viewmodel类中创建MutableLiveData<?>变量进行活动中的数据储存，
-
-在Viewmodel中创建get方法获取其实例，需要考虑为空时，为空时设置初始值，否则为null
-
-为其设置变量名.postValue,getValue,observe分别进行数据传入传出以及内部匿名类实现监听,
-
-最主要的优势还是能够使用observe进行监听，例如可以让两个fragment公用一个viewmodel中的livedata达到控件同步，同时在
-
-原理
-
-1.setValue和postValue的区别？
-
-setValue只能在主线程，postValue可以在所有线程，但是postValue是对setValue的一层封装，最后任然会调用setValue，
-
-2.setvalue方法原理
-
-通过lastVersion和Version两个int类型实现了版本号机制，用来保证收到的是最新的消息，当切换成onstate状态后只会收到最近的一次更新
-
-3.observe原理
-
-observe中的onchanged方法默认在主线程中执行，在observe方法注册观察者时，会判断当前组件（即oberve(this.....  中的this对应的组件）的生命周期是否终止，如果终止就注册失败.
-
-同时在监听器创建成功后，每当this组件的生命周期发生变化，如果达到Destroy状态就会将监听器从liveData的相应map中移出，从而保证了内存不泄漏
-
-其内部onchanged方法不一定是由引用改变触发的，而是由生命周期改变触发的
-
-当创建监听器的时候也利用lifecycle对设置的activity,fragment的生命周期进行监听者，每当达到onstart之后就会触发一次更新数据，将livedata的最新数据反馈到onchanged中去
-
-因此能够接受到注册前的消息，算是粘性事件
+	- ### 原理
+		- 一个info方法存放所有@OnLifecycleEvent()注解修饰的方法，最后通过反射的方式，方法名.invoke依据生命周期进行回调
+	- ### 作用
+		- #### 生命周期监听
+			- 安卓sdk29之后新增的registerActivityLifecycleCallbacks可以直接监听生命周期事件回调，sdk29之前会通过向 Activity 添加一个无 UI 界面的 Fragment(即 ReportFragment),间接获得 Activity 的各个生命周期事件的回调。
+	- ### 使用
+		- lifeCycle解耦界面与组件，可以对单个活动的生命周期进行监听，不使用lifeCycle的情况下需要去活动下重写onstart,onpause等再在其方法内进行响应操作，使用lifecycle则需要自定义一个观察者以lifecycleobserver作为接口，并且在其内部自定义方法用注解@OnLifecycleEvent()类型进行各个生命周期的绑定。
+- ## viewmodel
+	- ### 原理
+		- 为什么能够独立于活动或者碎片的生命周期之外？
+			- 找到viewmodelstore,andoridx的activity父类ComponentActivity实现的有ViewModelStoreOwner接口
+		- onCeate创建的时候如何保证拿到的是从前存有数据的viewmodelstore?
+			- get方法通过反射获取到这个viewmodel.class的标识，作为hashmap的key,之后如果之前存在就直接使用，没有的话则通过创建工厂里的create方法利用反射的方式创建对象
+	- ### 作用
+		- 是介于view和model之间的桥梁，用来将试图和数据分离，来把model中的数据提供给view
+		- 解决瞬态数据丢失，比如正常情况下在输入框内输入内容将屏幕旋转由于活动销毁并重建会导致数据丢失，但是viewodel由于他生命周期的特性，他的数据储存是独立与活动的生命周期之外的，其实活动被销毁他也仍然存在
+		- 数据统一进行管理可以减小代码维护难度
+	- ### 使用
+		- 自定义类继承自ViewModel类
+- ## liveData
+	- ### 作用
+	- 生命周期发生变化时会通知
+	  就是在viewmodel中的数据发生变化时通知试图页面的方式
+	  
+	  liveData具体使用：
+	  
+	  在自定义viewmodel类中创建MutableLiveData<?>变量进行活动中的数据储存，
+	  
+	  在Viewmodel中创建get方法获取其实例，需要考虑为空时，为空时设置初始值，否则为null
+	  
+	  为其设置变量名.postValue,getValue,observe分别进行数据传入传出以及内部匿名类实现监听,
+	  
+	  最主要的优势还是能够使用observe进行监听，例如可以让两个fragment公用一个viewmodel中的livedata达到控件同步，同时在
+	  
+	  原理
+	  
+	  1.setValue和postValue的区别？
+	  
+	  setValue只能在主线程，postValue可以在所有线程，但是postValue是对setValue的一层封装，最后任然会调用setValue，
+	  
+	  2.setvalue方法原理
+	  
+	  通过lastVersion和Version两个int类型实现了版本号机制，用来保证收到的是最新的消息，当切换成onstate状态后只会收到最近的一次更新
+	  
+	  3.observe原理
+	  
+	  observe中的onchanged方法默认在主线程中执行，在observe方法注册观察者时，会判断当前组件（即oberve(this.....  中的this对应的组件）的生命周期是否终止，如果终止就注册失败.
+	  
+	  同时在监听器创建成功后，每当this组件的生命周期发生变化，如果达到Destroy状态就会将监听器从liveData的相应map中移出，从而保证了内存不泄漏
+	  
+	  其内部onchanged方法不一定是由引用改变触发的，而是由生命周期改变触发的
+	  
+	  当创建监听器的时候也利用lifecycle对设置的activity,fragment的生命周期进行监听者，每当达到onstart之后就会触发一次更新数据，将livedata的最新数据反馈到onchanged中去
+	  
+	  因此能够接受到注册前的消息，算是粘性事件
 ##### DataBinding作用
 
 实现动态的数据绑定和事件绑定
