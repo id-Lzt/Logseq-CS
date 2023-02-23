@@ -3,7 +3,7 @@
 		- 能够发送消息和处理Looper分发给他的消息，handler是消息发送到指定MessageQueue，然后通过Looper将消息分发给Handler处理
 - ## Looper
 	- ### 作用
-		- 安卓是事件驱动的，所有事件都是loop启动的，(looper在C层与Java层都有实现) ：Looper是循环的意思,它负责从消息队列中循环的取出消息然后把消息交给Handler处理
+		- 安卓是事件驱动的，所有事件都是loop启动的，每一个点击触摸或者说Activity都是运行在Looper的控制之下。 looper在C层与Java层都有实现，Looper是循环的意思,它负责从消息队列中循环的取出消息然后把消息交给Handler处理
 	- ### 使用
 		- ### 主线程
 			- App 启动时,会调用到 ActivityThread 中,Looper 就在其 main() 方法中被启动,main() 中会主动调用 Looper.prepareMainLooper() 和 Looper.loop()
