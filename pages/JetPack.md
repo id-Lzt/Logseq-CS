@@ -15,7 +15,7 @@
 			  并且viewmodel可以设置观察者轻松实现双向绑定，视图上的变化也可以很快的和model交流。
 			  耦合度低，可以让开发人员专注于业务逻辑，设计同学专注于页面设计
 			  并且常规MVVM模式中用到了较多jetpack组件库中的组件，也是未来这个安卓开发的趋势，我觉得啥都可以尝试用MVVM模式。
-- ## lifecycle
+- ## Lifecycle
 	- ### 原理
 		- 一个info方法存放所有@OnLifecycleEvent()注解修饰的方法，最后通过反射的方式，方法名.invoke依据生命周期进行回调
 	- ### 作用
@@ -23,7 +23,7 @@
 			- 安卓sdk29之后新增的registerActivityLifecycleCallbacks可以直接监听生命周期事件回调，sdk29之前会通过向 Activity 添加一个无 UI 界面的 Fragment(即 ReportFragment),间接获得 Activity 的各个生命周期事件的回调。
 	- ### 使用
 		- lifeCycle解耦界面与组件，可以对单个活动的生命周期进行监听，不使用lifeCycle的情况下需要去活动下重写onstart,onpause等再在其方法内进行响应操作，使用lifecycle则需要自定义一个观察者以lifecycleobserver作为接口，并且在其内部自定义方法用注解@OnLifecycleEvent()类型进行各个生命周期的绑定。
-- ## viewmodel
+- ## ViewModel
 	- ### 原理
 		- 为什么能够独立于活动或者碎片的生命周期之外？
 			- 找到viewmodelstore,andoridx的activity父类ComponentActivity实现的有ViewModelStoreOwner接口
@@ -35,55 +35,33 @@
 		- 数据统一进行管理可以减小代码维护难度
 	- ### 使用
 		- 自定义类继承自ViewModel类
-- ## liveData
+- ## LiveData
+	- ### 原理
+		- setValue()和postValue()的区别？
+			- setValue只能在主线程，postValue可以在所有线程，但是postValue是对setValue的一层封装，最后任然会调用setValue，
+		- setValue()方法原理
+			- 通过lastVersion和Version两个int类型实现了版本号机制，用来保证收到的是最新的消息，当切换成onstate状态后只会收到最近的一次更新
+		- observe原理
+			- observe中的onchanged方法默认在主线程中执行，在observe方法注册观察者时，会判断当前组件（即oberve(this.....  中的this对应的组件）的生命周期是否终止，如果终止就注册失败.
+			- 同时在监听器创建成功后，每当this组件的生命周期发生变化，如果达到Destroy状态就会将监听器从liveData的相应map中移出，从而保证了内存不泄漏
+			- 其内部onchanged方法不一定是由引用改变触发的，而是由生命周期改变触发的
+			- 当创建监听器的时候也利用lifecycle对设置的activity,fragment的生命周期进行监听者，每当达到onstart之后就会触发一次更新数据，将livedata的最新数据反馈到onchanged中去
+			- 因此能够接受到注册前的消息，算是粘性事件
 	- ### 作用
-	- 生命周期发生变化时会通知
-	  就是在viewmodel中的数据发生变化时通知试图页面的方式
-	  
-	  liveData具体使用：
-	  
-	  在自定义viewmodel类中创建MutableLiveData<?>变量进行活动中的数据储存，
-	  
-	  在Viewmodel中创建get方法获取其实例，需要考虑为空时，为空时设置初始值，否则为null
-	  
-	  为其设置变量名.postValue,getValue,observe分别进行数据传入传出以及内部匿名类实现监听,
-	  
-	  最主要的优势还是能够使用observe进行监听，例如可以让两个fragment公用一个viewmodel中的livedata达到控件同步，同时在
-	  
-	  原理
-	  
-	  1.setValue和postValue的区别？
-	  
-	  setValue只能在主线程，postValue可以在所有线程，但是postValue是对setValue的一层封装，最后任然会调用setValue，
-	  
-	  2.setvalue方法原理
-	  
-	  通过lastVersion和Version两个int类型实现了版本号机制，用来保证收到的是最新的消息，当切换成onstate状态后只会收到最近的一次更新
-	  
-	  3.observe原理
-	  
-	  observe中的onchanged方法默认在主线程中执行，在observe方法注册观察者时，会判断当前组件（即oberve(this.....  中的this对应的组件）的生命周期是否终止，如果终止就注册失败.
-	  
-	  同时在监听器创建成功后，每当this组件的生命周期发生变化，如果达到Destroy状态就会将监听器从liveData的相应map中移出，从而保证了内存不泄漏
-	  
-	  其内部onchanged方法不一定是由引用改变触发的，而是由生命周期改变触发的
-	  
-	  当创建监听器的时候也利用lifecycle对设置的activity,fragment的生命周期进行监听者，每当达到onstart之后就会触发一次更新数据，将livedata的最新数据反馈到onchanged中去
-	  
-	  因此能够接受到注册前的消息，算是粘性事件
-##### DataBinding作用
-
-实现动态的数据绑定和事件绑定
-
-首先添加依赖
-
-在布局文件中以layout为根目录添加数据类的数据对象尖括号data,同时在具体View的中用@{}实现绑定
-
-在正常活动里面是设置setContentView来设置视图，这里调用 DataBindingUtil的setContentView方法获取ActivityMainBinding对象，调用其数据类的set方法就可以实现View中的数据设定
-
-让布局文件承担部分原本属于页面的工作，可以进行数据绑定以及事件绑定。不用在活动里面创建各种view变量然后挨个进行操作，而是基本可以靠ActivityMainBinding进行所有数据的绑定。
-
-二级界面中使用databinding数据：app:自定义供二级页面使用的变量名=@{data的name名}
+		- 生命周期发生变化时会通知
+		- 就是在viewmodel中的数据发生变化时通知试图页面的方式
+	- ### 使用
+		- 在自定义ViewModel类中创建MutableLiveData<?>变量进行活动中的数据储存，
+		- 在ViewModel中创建get方法获取其实例，需要考虑为空时，为空时设置初始值，否则为null
+		- 为其设置变量名.postValue,getValue,observe分别进行数据传入传出以及内部匿名类实现监听,
+		- 最主要的优势还是能够使用observe进行监听，例如可以让两个fragment公用一个viewmodel中的livedata达到控件同步，同时在
+- ## DataBinding
+- 实现动态的数据绑定和事件绑定
+- 首先添加依赖
+- 在布局文件中以layout为根目录添加数据类的数据对象尖括号data,同时在具体View的中用@{}实现绑定
+- 在正常活动里面是设置setContentView来设置视图，这里调用 DataBindingUtil的setContentView方法获取ActivityMainBinding对象，调用其数据类的set方法就可以实现View中的数据设定
+- 让布局文件承担部分原本属于页面的工作，可以进行数据绑定以及事件绑定。不用在活动里面创建各种view变量然后挨个进行操作，而是基本可以靠ActivityMainBinding进行所有数据的绑定。
+- 二级界面中使用databinding数据：app:自定义供二级页面使用的变量名=@{data的name名}
 ##### bindadpter有什么用？
 
 可以在布局文件中实现实现静态的数据绑定
