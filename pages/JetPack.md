@@ -1,54 +1,32 @@
 - 是由多个库组成的套件，是谷歌给安卓开发者提供的写业务代码的最佳做法。
 - Google 推出了 Jetpack，让开发者能够使用标准的架构组件，而不用去纠结架构的方案设计，可以将更多的精力放在自己的业务代码上
-- ##### MVVM和MVC各自特点以及应用场景？
+- ### MVVM和MVC各自特点以及应用场景？
+	- ### MVC
+		- #### 组成
+			- MVC分别是model,view,controller,res文件下的布局就是view层，而activity则充当controller层。
+		- #### 使用
+			- 但是基本MVC模式里面xml文件实际做的事情很少，很容导致大部分东西都写在acitivity上动不动activity就有几百行，程序臃肿。
+			- mvc适合小项目的快速开发。
+	- ### MVVM
+		- #### 组成
+			- MVVM分别为model,view,viewmodel,严格的mvvm开发model和view之间不能直接进行数据交流而是依靠viewmodel
+		- #### 使用
+			- viewmodel中的数据独立于生命周期之外，从而解决了数据的瞬态丢失等情况，
+			  并且viewmodel可以设置观察者轻松实现双向绑定，视图上的变化也可以很快的和model交流。
+			  耦合度低，可以让开发人员专注于业务逻辑，设计同学专注于页面设计
+			  并且常规MVVM模式中用到了较多jetpack组件库中的组件，也是未来这个安卓开发的趋势，我觉得啥都可以尝试用MVVM模式。
+- ## lifecycle
+- ### 生命周期监听
+	- 安卓sdk29之后新增的registerActivityLifecycleCallbacks可以直接监听生命周期事件回调，sdk29之前会通过向 Activity 添加一个无 UI 界面的 Fragment(即 ReportFragment),间接获得 Activity 的各个生命周期事件的回调。
+- ### 实现原理
+	- 一个info方法存放所有@OnLifecycleEvent()注解修饰的方法，最后通过反射的方式，方法名.invoke依据生命周期进行回调
+- ### 使用
+	- lifeCycle解耦界面与组件，可以对单个活动的生命周期进行监听，不使用lifeCycle的情况下需要去活动下重写onstart,onpause等再在其方法内进行响应操作，使用lifecycle则需要自定义一个观察者以lifecycleobserver作为接口，并且在其内部自定义方法用注解@OnLifecycleEvent（）类型进行各个生命周期的绑定。
+- ## 什么是viewmodel?
   
-  MVC,分别是model,view,controller,res文件下的布局就是view层，而activity则充当controller层，
+  是介于view和model之间的桥梁，用来将试图和数据分离，来把model中的数据提供给view
   
-  但是基本MVC模式里面xml文件实际做的事情很少，很容导致大部分东西都写在acitivity上动不动activity就有几百行，程序臃肿。
-  
-  我觉得mvc适合小项目的快速开发。
-  
-  MVVM,分别为model,view,viewmodel,严格的mvvm开发model和view之间不能直接进行数据交流而是依靠viewmodel
-  
-  viewmodel中的数据独立于生命周期之外，从而解决了数据的瞬态丢失等情况，
-  
-  并且viewmodel可以设置观察者轻松实现双向绑定，视图上的变化也可以很快的和model交流。
-  
-  并且耦合度低，可以让开发人员专注于业务逻辑，设计同学专注于页面设计
-  
-  并且常规MVVM模式中用到了较多jetpack组件库中的组件，也是未来这个安卓开发的趋势，我觉得啥都可以尝试用MVVM模式。
-  
-  但是我个人使用起来主要是布局里面的一些字符串格式不熟练的话经常容易犯错，而且很多情况程序不报错本身只是错了一个字母，所以项目开发的最开始没有想着用。
-- ##### 什么是jetpack?
-  
-   。
-##### jetpack有哪些优势？
-
-具有向后兼容性，可以减少崩溃和内存泄漏
-
-可以管理各种activity（比如后台任务，生命周期等）
-
-基本可以在各种安卓版本和设备中以一致的方法运行
-
-viewmodel,liveData,DataBinding,bindadpter,Navigation,Room,lifecycle，WorkManagaer
-##### lifecycle
-
-1.生命周期监听：
-
-安卓sdk29之后新增的registerActivityLifecycleCallbacks可以直接监听生命周期事件回调，sdk29之前会通过向 Activity 添加一个无 UI 界面的 Fragment（即 ReportFragment），间接获得 Activity 的各个生命周期事件的回调。
-
-2.实现原理
-
-一个info方法存放所有@OnLifecycleEvent（）注解修饰的方法，最后通过反射的方式，方法名.invoke依据生命周期进行回调
-
-使用：
-
-lifeCycle解耦界面与组件，可以对单个活动的生命周期进行监听，不使用lifeCycle的情况下需要去活动下重写onstart,onpause等再在其方法内进行响应操作，使用lifecycle则需要自定义一个观察者以lifecycleobserver作为接口，并且在其内部自定义方法用注解@OnLifecycleEvent（）类型进行各个生命周期的绑定。
-##### 什么是viewmodel?
-
-是介于view和model之间的桥梁，用来将试图和数据分离，来把model中的数据提供给view
-
-使用：自定义类继承自ViewModel类
+  使用：自定义类继承自ViewModel类
 ##### viewmodel作用
 
 1.解决瞬态数据丢失，比如正常情况下在输入框内输入内容将屏幕旋转由于活动销毁并重建会导致数据丢失，但是viewodel由于他生命周期的特性，他的数据储存是独立与活动的生命周期之外的，其实活动被销毁他也仍然存在
@@ -146,14 +124,14 @@ activity中需要首先对setContentView进行基本的绑定操作，以及在r
 Android8.0以后，Android对于后台service管理的更加严格，应用在后台启动的服务必须是前台服务，还要求前台服务启动以后5秒内必须创建好一个前台通知navigation，否则会导致应用闪退。谷歌推荐使用WorkManager架构组件来管理后台工作任务。
 
 WorkManager是Jetpack中一个重要组件。
-#### compose
-
-优势：
-
-减少xml文件，降低包体积
-
-java代码直接设置UI布局，效率高于读取xml，在右方的预览模式可以看到自己写入的Ui，但是无法读取到网络，文件内容
-
-缺点：
-
-需要宠幸
+- #### compose
+  
+  优势：
+  
+  减少xml文件，降低包体积
+  
+  java代码直接设置UI布局，效率高于读取xml，在右方的预览模式可以看到自己写入的Ui，但是无法读取到网络，文件内容
+  
+  缺点：
+  
+  需要

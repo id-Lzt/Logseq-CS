@@ -218,7 +218,7 @@
  :ref/linked-references-collapsed-threshold 50
 
  ;; Favorites to list on the left sidebar
- :favorites ["收藏列表" "Android" "JAVA" "JVM" "安卓" "算法" "设计模式" "数据库" "计算机网络" "计算机操作系统" "场景题"]
+ :favorites ["收藏列表" "Android" "Java" "JVM" "安卓" "算法" "设计模式" "数据库" "计算机网络" "计算机操作系统" "场景题"]
 
  ;; any number between 0 and 1 (the greater it is the faster the changes of the next-interval of card reviews) (default 0.5)
  ;; :srs/learning-fraction 0.5
