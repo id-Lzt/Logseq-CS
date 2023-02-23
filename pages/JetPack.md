@@ -57,52 +57,39 @@
 		- 最主要的优势还是能够使用observe进行监听，例如可以让两个fragment公用一个viewmodel中的livedata达到控件同步，同时在
 - ## DataBinding
 	- ### 作用
-- 实现动态的数据绑定和事件绑定
-- 首先添加依赖
-- 在布局文件中以layout为根目录添加数据类的数据对象尖括号data,同时在具体View的中用@{}实现绑定
-- 在正常活动里面是设置setContentView来设置视图，这里调用 DataBindingUtil的setContentView方法获取ActivityMainBinding对象，调用其数据类的set方法就可以实现View中的数据设定
-- 让布局文件承担部分原本属于页面的工作，可以进行数据绑定以及事件绑定。不用在活动里面创建各种view变量然后挨个进行操作，而是基本可以靠ActivityMainBinding进行所有数据的绑定。
-- 二级界面中使用databinding数据：app:自定义供二级页面使用的变量名=@{data的name名}
-##### bindadpter有什么用？
-
-可以在布局文件中实现实现静态的数据绑定
-
-不需要获取对应View实例，直接通过注释@BindAdpter
-
-可在布局里面设置加载网址的url字符串（用@{单引号}）和drawable文件地址（用@{@drawable/drawable文件名称}），然后不获取对应view实例，通过创建对应名称的方法和@Bindadpter实现数据绑定
-##### Baseobservable和ObservableField有什么用？
-
-用来进行双向绑定，一方面让布局xml文件承担页面的作用，同时试图中个人操作也能实时被程序监听进行反馈（使用时有点类似liveData）
-##### recyclerview中进行数据绑定？
-
-activity中需要首先对setContentView进行基本的绑定操作，以及在recyclerview设置adapter时前面加上actvityMainBinding.,之后在adpter中的viewholder以及onbindview对单个item进行基本绑定操作
-##### Navigation作用？
-
-在没有出现navigation之前在activity中嵌套多个fragment需要需要用fragmentmanager和fragmentTransaction来管理fragment之间的切换，但是过程繁琐
-#### Room
-
-支持与LiveData、RxJava
-
-三个主要部分
-
-@Entity：对应数据库中的表
-
-@DAO：包含访问数据库的方法，增删改查等
-
-@Database继承自RoomDatabase的抽象类，在注释标注表和版本
-##### WorkManager
-
-Android8.0以后，Android对于后台service管理的更加严格，应用在后台启动的服务必须是前台服务，还要求前台服务启动以后5秒内必须创建好一个前台通知navigation，否则会导致应用闪退。谷歌推荐使用WorkManager架构组件来管理后台工作任务。
-
-WorkManager是Jetpack中一个重要组件。
-- #### compose
-  
-  优势：
-  
-  减少xml文件，降低包体积
-  
-  java代码直接设置UI布局，效率高于读取xml，在右方的预览模式可以看到自己写入的Ui，但是无法读取到网络，文件内容
-  
-  缺点：
-  
-  需要
+		- 实现动态的数据绑定和事件绑定
+	- ### 使用
+		- 首先添加依赖
+		- 在布局文件中以layout为根目录添加数据类的数据对象尖括号data,同时在具体View的中用@{}实现绑定
+		- 在正常活动里面是设置setContentView来设置视图，这里调用 DataBindingUtil的setContentView方法获取ActivityMainBinding对象，调用其数据类的set方法就可以实现View中的数据设定
+		- 让布局文件承担部分原本属于页面的工作，可以进行数据绑定以及事件绑定。不用在活动里面创建各种view变量然后挨个进行操作，而是基本可以靠ActivityMainBinding进行所有数据的绑定。
+		- 二级界面中进行数据绑定
+			- app:自定义供二级页面使用的变量名=@{data的name名}
+		- recyclerview中进行数据绑定
+			- activity中需要首先对setContentView进行基本的绑定操作，以及在recyclerview设置adapter时前面加上actvityMainBinding.,之后在adpter中的viewholder以及onbindview对单个item进行基本绑定操作
+		-
+- ## bindadpter
+	- ### 作用
+		- 可以在布局文件中实现实现静态的数据绑定
+	- ### 使用
+		- 不需要获取对应View实例，直接通过注释@BindAdpter
+		  可在布局里面设置加载网址的url字符串（用@{单引号}）和drawable文件地址（用@{@drawable/drawable文件名称}），然后不获取对应view实例，通过创建对应名称的方法和@Bindadpter实现数据绑定
+-
+- ## Room
+	- ### 作用
+		- 数据库，支持与LiveData、RxJava
+	- ### 使用
+		- 三个主要部分：
+			- @Entity：对应数据库中的表
+			- @DAO：包含访问数据库的方法，增删改查等
+			- @Database继承自RoomDatabase的抽象类，在注释标注表和版本
+	- ## WorkManager
+	- ### 作用
+		- Android8.0以后，Android对于后台service管理的更加严格，应用在后台启动的服务必须是前台服务，还要求前台服务启动以后5秒内必须创建好一个前台通知navigation，否则会导致应用闪退。谷歌推荐使用WorkManager架构组件来管理后台工作任务。
+- ## compose
+	- ### 作用
+		- 减少xml文件，降低包体积
+		- java代码直接设置UI布局，效率高于读取xml，在右方的预览模式可以看到自己写入的Ui，但是无法读取到网络，文件内容
+- ## Navigation
+	- ### 作用
+		- 在没有出现navigation之前在activity中嵌套多个fragment需要需要用fragmentmanager和fragmentTransaction来管理fragment之间的切换，但是过程繁琐
