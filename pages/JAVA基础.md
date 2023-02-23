@@ -1,0 +1,13 @@
+-
+- ## 面试
+	- ### ==和equals()区别？
+		- ==是比较对象
+		- equals()的作用也是判断两个对象是否相等。但它一般有两种使用情况：
+			- 1.类没有覆盖写 equals() 方法。则通过 equals() 比较该类的两个对象时，等价于通过“==”比较这两个对象。
+			- 2.类override了 equals() 方法。一般，我们都覆盖 equals() 方法来比较两个对象的内容是否相等；若它们的内容相等，则返回 true (即，认为这两个对象相等)。
+	- ### hashcode()和equals()
+		- 不考虑自定义hashcode()和equals()的情况下，equals()相同hashcode()一定相同，hashcode()相同，由于hash冲突，equals()不一定相同
+	- ### 自定义equals()
+		- 先判断是否==，地址都相等，则内容也相等，return true
+		- 再通过instanceOf()方法,判断传入的object类类型是否是我们想要的，不是就直接return false
+		- 之后将内部变量挨个进行equals()
